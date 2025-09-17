@@ -3,6 +3,10 @@ import { useLocation, Link } from 'react-router-dom';
 import { ArrowLeft, User, Calendar, MapPin, Truck, Star, Heart, Wind, Shield, Bike } from 'lucide-react';
 import axios from 'axios';
 
+const apiUrl = import.meta.env.PROD
+  ? import.meta.env.VITE_API_URL_PRODUCTION
+  : import.meta.env.VITE_API_URL_DEVELOPMENT;
+
 const BookingPage = () => {
   const location = useLocation();
   const packageData = location.state?.packageData;
@@ -141,7 +145,7 @@ const BookingPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5002/api/validate-membership', {
+      const response = await axios.post(`${apiUrl}/api/validate-membership`, {
         email: validationEmail,
         membershipId: membershipId,
       });
@@ -197,7 +201,7 @@ const BookingPage = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5002/api/v2/booking', bookingData);
+      const response = await axios.post(`${apiUrl}/api/v2/booking`, bookingData);
       alert('Booking confirmed! We have sent you an email with the details.');
       console.log(response.data.message);
 
@@ -242,7 +246,7 @@ const BookingPage = () => {
           subject: 'Pickup Request for Booking',
           recipient: 'your-admin-email@example.com', // Replace with the actual admin email
         };
-        await axios.post('http://localhost:5002/api/v2/send-admin-email', adminEmailData);
+        await axios.post(`${apiUrl}/api/v2/send-admin-email`, adminEmailData);
         console.log('Admin email sent for pickup request.');
       }
     } catch (error) {
