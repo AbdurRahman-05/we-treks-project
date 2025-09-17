@@ -71,7 +71,7 @@ const Membership = () => {
     };
 
     try {
-      const res = await fetch('http://localhost:5002/api/membership', {
+            const res = await fetch('https://wetreck-backend.onrender.com/api/membership', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submitForm)
