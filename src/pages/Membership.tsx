@@ -26,6 +26,8 @@ const Membership = () => {
     amount: 0,
   });
   const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{name: string, amount: number} | null>(null);
 
   const handlePlanSelect = (plan: {name: string, amount: number}) => {
@@ -48,6 +50,7 @@ const Membership = () => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     let startDate = null;
     let endDate = null;
@@ -71,21 +74,25 @@ const Membership = () => {
     };
 
     try {
-            const res = await fetch('https://wetreck-backend.onrender.com/api/membership', {
+      const res = await fetch('https://wetreck-backend.onrender.com/api/membership', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submitForm)
       });
+      const data = await res.json();
       if (res.ok) {
+        setPopupMessage(data.message || 'Mail successfully submitted');
         setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 2500);
+        setTimeout(() => setShowPopup(false), 3500);
         setForm({ name: '', dob: '', mobile: '', email: '', occupation: '', address: '', plan: '', amount: 0 });
         setSelectedPlan(null);
       } else {
-        alert('Failed to submit. Please try again.');
+        alert(data.error || 'Failed to submit. Please try again.');
       }
     } catch {
       alert('Error submitting form.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,6 +150,11 @@ const Membership = () => {
   // ...existing code...
   return (
     <div className="pt-16">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="text-white text-2xl font-bold">Processing...</div>
+        </div>
+      )}
       {/* Hero Section */}
       <section className="relative py-20 flex items-center justify-center overflow-hidden">
         {/* Full Background Image with Overlay */}
@@ -263,7 +275,9 @@ const Membership = () => {
                   <input name="occupation" value={form.occupation} onChange={handleChange} required placeholder="Occupation" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
                   <textarea name="address" value={form.address} onChange={handleChange} required placeholder="Address" rows={2} className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
                 </div>
-                <button type="submit" className="mt-8 w-full py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-emerald-900 font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 animate-bounce">Submit Details and Pay</button>
+                <button type="submit" className="mt-8 w-full py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-emerald-900 font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 animate-bounce">
+                  Submit Details and Pay
+                </button>
               </form>
             </div>
           )}
@@ -309,7 +323,7 @@ const Membership = () => {
                     animation: flame 0.5s infinite;
                   }
                 `}</style>
-                <span>Mail successfully submitted</span>
+                <span>{popupMessage}</span>
               </div>
             </div>
           )}

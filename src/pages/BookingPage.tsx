@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { ArrowLeft, User, Calendar, MapPin, Truck, Star, Heart, Wind, Shield, Bike } from 'lucide-react';
 import axios from 'axios';
+import Lottie from "lottie-react";
+import confettiAnimation from '../animations/Flex Confetti.json';
+
 
 const apiUrl = import.meta.env.PROD
   ? import.meta.env.VITE_API_URL_PRODUCTION
@@ -45,6 +48,10 @@ const BookingPage = () => {
   const [validationEmail, setValidationEmail] = useState('');
   const [isMembershipValid, setIsMembershipValid] = useState(false);
   const [membershipError, setMembershipError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -181,6 +188,8 @@ const BookingPage = () => {
       return;
     }
 
+    setIsLoading(true);
+
     let bookingType = 'tour';
     if (packageData.duration) {
       bookingType = 'bike';
@@ -206,7 +215,9 @@ const BookingPage = () => {
 
     try {
       const response = await axios.post(`${apiUrl}/api/v2/booking`, bookingData);
-      alert('Booking confirmed! We have sent you an email with the details.');
+            setPopupMessage('Booking confirmed! We have sent you an email with the details.');
+      setShowCelebration(true);
+      
       console.log(response.data.message);
 
       // Reset form state
@@ -256,11 +267,37 @@ const BookingPage = () => {
     } catch (error) {
       console.error('Booking failed:', error.response ? error.response.data : error.message);
       alert('Booking failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="pt-16 bg-gray-50">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="text-white text-2xl font-bold">Processing...</div>
+        </div>
+      )}
+
+      {showCelebration && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex flex-col justify-center items-center z-50">
+          <Lottie
+            animationData={confettiAnimation}
+            loop={false}
+            autoplay={true}
+            style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
+          />
+          <div className="relative bg-white p-8 rounded-lg shadow-2xl text-center max-w-md mx-auto z-10">
+            <h2 className="text-3xl font-bold text-emerald-600 mb-4">Booking Confirmed!</h2>
+            <p className="text-gray-700 text-lg mb-6">{popupMessage}</p>
+            <Link to="/" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+              Go to Home
+            </Link>
+          </div>
+        </div>
+      )}
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
           to={packageData.duration ? `/bikeriding/${packageData.id}` : (packageData.trekDuration ? `/trek/${packageData.id}` : `/package/${packageData.id}`)}

@@ -1,7 +1,28 @@
+import { useState, useEffect } from 'react';
 import logo from '../images/eae1499f-5f52-4311-8a8d-5fe1923bdb0f.jpeg';
 import { Star, Quote } from 'lucide-react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const Testimonials = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mediaQuery.matches);
+
+    const handleResize = () => {
+      setIsMobile(mediaQuery.matches);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const testimonials = [
     {
       name: 'Ayush Sharma',
@@ -40,6 +61,18 @@ const Testimonials = () => {
     }
   ];
 
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    fade: true,
+  };
+
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,38 +91,60 @@ const Testimonials = () => {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full min-h-[340px]">
-              {/* Quote Icon */}
-              <div className="mb-4">
-                <Quote className="h-8 w-8 text-emerald-600" />
-              </div>
-
-              {/* Rating */}
-              <div className="flex items-center mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-
-              {/* Testimonial Text */}
-              <p className="text-gray-700 mb-6 leading-relaxed italic">
-                "{testimonial.testimonial}"
-              </p>
-
-              {/* Author Info */}
-              <div className="flex items-center">
-                <div>
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600">{testimonial.location}</div>
-                  <div className="text-sm text-emerald-600 font-medium">{testimonial.package}</div>
+        {/* Testimonials */}
+        {isMobile ? (
+          <Slider {...sliderSettings}>
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="px-2">
+                <div className="bg-gray-50 rounded-2xl p-8 flex flex-col h-full min-h-[340px]">
+                  <div className="mb-4">
+                    <Quote className="h-8 w-8 text-emerald-600" />
+                  </div>
+                  <div className="flex items-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-6 leading-relaxed italic">
+                    "{testimonial.testimonial}"
+                  </p>
+                  <div className="flex items-center">
+                    <div>
+                      <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                      <div className="text-sm text-gray-600">{testimonial.location}</div>
+                      <div className="text-sm text-emerald-600 font-medium">{testimonial.package}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </Slider>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full min-h-[340px]">
+                <div className="mb-4">
+                  <Quote className="h-8 w-8 text-emerald-600" />
+                </div>
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 leading-relaxed italic">
+                  "{testimonial.testimonial}"
+                </p>
+                <div className="flex items-center">
+                  <div>
+                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                    <div className="text-sm text-gray-600">{testimonial.location}</div>
+                    <div className="text-sm text-emerald-600 font-medium">{testimonial.package}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Stats Section */}
         <div className="mt-20 bg-emerald-600 rounded-3xl p-8 md:p-12 text-white">
