@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
+interface User {
+  _id: string;
+  username: string;
+  password: string;
+}
+
 const Users: React.FC = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/users')
@@ -26,7 +32,7 @@ const Users: React.FC = () => {
                 <td colSpan={2} className="py-6 px-6 text-center text-gray-500">No users submitted yet.</td>
               </tr>
             ) : (
-              users.map((user: any) => (
+              users.map((user: User) => (
                 <tr key={user._id} className="border-b hover:bg-gray-50 transition">
                   <td className="py-3 px-6">{user.username}</td>
                   <td className="py-3 px-6">{user.password}</td>

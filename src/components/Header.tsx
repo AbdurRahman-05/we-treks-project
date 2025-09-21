@@ -36,15 +36,15 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-auto py-2 md:h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img
               src={logo}
               alt="Logo"
-              style={{ height: 48, width: 48, objectFit: 'cover', borderRadius: '50%' }}
+              style={{ height: 40, width: 40, objectFit: 'cover', borderRadius: '50%' }}
             />
-            <span className="text-2xl font-bold text-gray-900">We Trek India</span>
+            <span className="text-xl sm:text-2xl font-bold text-gray-900">We Trek India</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -103,7 +103,7 @@ const Header = () => {
                 <Link
                   key={index}
                   to={item.href}
-                  className="block py-2 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
+                  className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
                   onClick={() => {
                     setIsMenuOpen(false);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -115,7 +115,7 @@ const Header = () => {
                 <button
                   key={index}
                   onClick={() => handleNavClick(item)}
-                  className="block py-2 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200 text-left w-full"
+                  className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200 text-left w-full"
                 >
                   {item.label}
                 </button>

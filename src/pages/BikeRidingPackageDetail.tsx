@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Star, CheckCircle, XCircle, Camera, Bike } from 'lucide-react';
+import { ArrowLeft, MapPin, Star, CheckCircle, XCircle, Camera } from 'lucide-react';
 import { bikeRides } from '../data/bikeRides';
 
 const BikeRidingPackageDetail = () => {
@@ -37,6 +37,7 @@ const BikeRidingPackageDetail = () => {
       case 'Moderate': return 'text-yellow-600 bg-yellow-100';
       case 'Challenging': return 'text-orange-600 bg-orange-100';
       case 'Difficult': return 'text-red-600 bg-red-100';
+      case 'Extreme': return 'text-red-600 bg-red-100';
       default: return 'text-gray-600 bg-gray-100';
     }
   };

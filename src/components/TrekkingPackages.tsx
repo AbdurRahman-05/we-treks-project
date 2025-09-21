@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Users, MapPin, Star, ArrowRight } from 'lucide-react';
 import { trekkingPackages } from '../data/trekkingPackages';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 
 const TrekkingPackages = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mediaQuery.matches);
+
+    const handleResize = () => {
+      setIsMobile(mediaQuery.matches);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 5000,
+  };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -31,75 +61,149 @@ const TrekkingPackages = () => {
         </div>
 
         {/* Packages Grid */}
-        <div className="flex flex-wrap justify-center gap-8">
-          {trekkingPackages.map((pkg) => (
-            <div key={pkg.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group max-w-sm">
-              {/* Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={pkg.image}
-                  alt={pkg.title}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(pkg.difficulty)}`}>
-                    {pkg.difficulty}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  {pkg.location}
-                </div>
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center space-x-1">
-                  <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                  <span className="text-sm font-medium">{pkg.rating}</span>
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.title}</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">{pkg.description}</p>
-
-                {/* Package Details */}
-                <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2 text-emerald-600" />
-                    {pkg.trekDuration}
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Users className="h-4 w-4 mr-2 text-emerald-600" />
-                    {pkg.suitableFor}
-                  </div>
-                </div>
-
-                {/* Highlights */}
-                <div className="mb-4">
-                  <div className="text-sm font-medium text-gray-700 mb-2">Highlights:</div>
-                  <div className="flex flex-wrap gap-1">
-                    {pkg.highlights.map((highlight, index) => (
-                      <span key={index} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">
-                        {highlight}
+        {isMobile && trekkingPackages.length > 1 ? (
+          <Slider {...sliderSettings}>
+            {trekkingPackages.map((pkg) => (
+              <div key={pkg.id} className="px-2">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                  {/* Image */}
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={pkg.image}
+                      alt={pkg.title}
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(pkg.difficulty)}`}>
+                        {pkg.difficulty}
                       </span>
-                    ))}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="flex items-center text-sm text-gray-500 mb-2">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      {pkg.location}
+                    </div>
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center space-x-1">
+                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                      <span className="text-sm font-medium">{pkg.rating}</span>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.title}</h3>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{pkg.description}</p>
+
+                    {/* Package Details */}
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="h-4 w-4 mr-2 text-emerald-600" />
+                        {pkg.trekDuration}
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <Users className="h-4 w-4 mr-2 text-emerald-600" />
+                        {pkg.suitableFor}
+                      </div>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="mb-4">
+                      <div className="text-sm font-medium text-gray-700 mb-2">Highlights:</div>
+                      <div className="flex flex-wrap gap-1">
+                        {pkg.highlights.map((highlight, index) => (
+                          <span key={index} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price and CTA */}
+                    <div className="flex items-center justify-end pt-4 border-t border-gray-100">
+                      <Link
+                        to={`/trek/${pkg.id}`}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-
-                {/* Price and CTA */}
-                <div className="flex items-center justify-end pt-4 border-t border-gray-100">
-                  <Link
-                    to={`/trek/${pkg.id}`}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1"
-                  >
-                    <span>View Details</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
               </div>
+            ))}
+          </Slider>
+        ) : (
+          <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(350px,1fr))]">
+              {trekkingPackages.map((pkg) => (
+                <div key={pkg.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                  {/* Image */}
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={pkg.image}
+                      alt={pkg.title}
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(pkg.difficulty)}`}>
+                        {pkg.difficulty}
+                      </span>
+                    </div>
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center space-x-1">
+                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                      <span className="text-sm font-medium">{pkg.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="flex items-center text-sm text-gray-500 mb-2">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      {pkg.location}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.title}</h3>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{pkg.description}</p>
+
+                    {/* Package Details */}
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="h-4 w-4 mr-2 text-emerald-600" />
+                        {pkg.trekDuration}
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <Users className="h-4 w-4 mr-2 text-emerald-600" />
+                        {pkg.suitableFor}
+                      </div>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="mb-4">
+                      <div className="text-sm font-medium text-gray-700 mb-2">Highlights:</div>
+                      <div className="flex flex-wrap gap-1">
+                        {pkg.highlights.map((highlight, index) => (
+                          <span key={index} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price and CTA */}
+                    <div className="flex items-center justify-end pt-4 border-t border-gray-100">
+                      <Link
+                        to={`/trek/${pkg.id}`}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+        )}
       </div>
     </section>
   );

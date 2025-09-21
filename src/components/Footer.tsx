@@ -1,4 +1,4 @@
-import { Mountain, Phone, Mail, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import logoImg from '../images/eae1499f-5f52-4311-8a8d-5fe1923bdb0f.jpeg';
 import { packages } from '../data/packages';
 import { Link } from 'react-router-dom';

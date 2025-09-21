@@ -62,7 +62,7 @@ const About = () => {
               alt="Trekking group in mountains"
               className="rounded-2xl shadow-2xl w-full h-96 object-cover"
             />
-            <div className="absolute -bottom-6 -left-6 bg-emerald-600 text-white p-6 rounded-xl shadow-xl">
+            <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-emerald-600 text-white p-6 rounded-xl shadow-xl">
               <div className="text-2xl font-bold">98%</div>
               <div className="text-sm">Customer Satisfaction</div>
             </div>

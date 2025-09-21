@@ -2,9 +2,17 @@
 // Displays a table of users who have submitted the login form. Fetches data from backend API.
 import React, { useEffect, useState } from 'react';
 
+interface UserInformation {
+  _id: string;
+  username: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
 const UsersInformation: React.FC = () => {
   // State to hold user data fetched from backend
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserInformation[]>([]);
 
   useEffect(() => {
     // Fetches user data from backend API when component mounts
@@ -27,7 +35,7 @@ const UsersInformation: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user: any) => (
+          {users.map((user: UserInformation) => (
             <tr key={user._id}>
               <td className="py-2 px-4 border-b">{user.username}</td>
               <td className="py-2 px-4 border-b">{user.email}</td>

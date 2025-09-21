@@ -47,6 +47,10 @@ const BookingPage = () => {
   const [membershipError, setMembershipError] = useState('');
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
     if (packageData) {
       const priceString = packageData.price.replace(/[^0-9]/g, '');
       const price = parseInt(priceString, 10);

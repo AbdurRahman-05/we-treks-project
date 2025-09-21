@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Star, Clock, Mountain, CheckCircle, XCircle, Camera } from 'lucide-react';
+import { ArrowLeft, MapPin, Star, CheckCircle, XCircle, Camera } from 'lucide-react';
 import { packages } from '../data/packages';
 
 const PackageDetail = () => {

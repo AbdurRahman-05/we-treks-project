@@ -31,10 +31,9 @@ const BikeRidingPackage = () => {
         </div>
 
         {/* Packages Grid */}
-        <div className="flex justify-center">
-          <div className="gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {bikeRides.map((pkg) => (
-              <div key={pkg.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+              <div key={pkg.id} className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group ${bikeRides.length === 1 ? 'lg:col-start-2' : ''}`}>
                 {/* Image */}
                 <div className="relative overflow-hidden">
                   <img
@@ -100,7 +99,6 @@ const BikeRidingPackage = () => {
                 </div>
               </div>
             ))}
-          </div>
         </div>
 
         {/* View All Button */}

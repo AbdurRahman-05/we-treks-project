@@ -1,6 +1,4 @@
-
 import logo from '../images/eae1499f-5f52-4311-8a8d-5fe1923bdb0f.jpeg';
-import prakashImg from '../images/Abdur professional photo.jpg';
 import { Star, Quote } from 'lucide-react';
 
 const Testimonials = () => {

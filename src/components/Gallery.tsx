@@ -1,7 +1,6 @@
 // React hook for managing state
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import trekImg from '../images/trek.webp';
 import bikeridingImg from '../images/bikeriding.jpg';
 import assamImg from '../images/assam.jpg';
 import megalayaImg from '../images/megalaya.jpg';

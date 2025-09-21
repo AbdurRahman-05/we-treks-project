@@ -84,7 +84,7 @@ const Membership = () => {
       } else {
         alert('Failed to submit. Please try again.');
       }
-    } catch (err) {
+    } catch {
       alert('Error submitting form.');
     }
   };
