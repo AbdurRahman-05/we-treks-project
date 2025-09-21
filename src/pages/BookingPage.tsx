@@ -288,9 +288,9 @@ const BookingPage = () => {
             autoplay={true}
             style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
           />
-          <div className="relative bg-white p-8 rounded-lg shadow-2xl text-center max-w-md mx-auto z-10">
+          <div className="relative p-8 rounded-lg shadow-2xl text-center max-w-sm mx-4 z-10">
             <h2 className="text-3xl font-bold text-emerald-600 mb-4">Booking Confirmed!</h2>
-            <p className="text-gray-700 text-lg mb-6">{popupMessage}</p>
+            <p className="text-white text-lg mb-6">{popupMessage}</p>
             <Link to="/" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
               Go to Home
             </Link>
