@@ -8,30 +8,17 @@ const Header = () => {
   const location = useLocation();
 
   const navItems = [
-  { label: 'Home', href: '/', type: 'link' },
-  { label: 'About', href: '#about', type: 'scroll' },
-  { label: 'Trekking', href: '#trekking-packages', type: 'scroll' },
-    { label: 'Bike Riding', href: '#bike-riding-package', type: 'scroll' },
-    { label: 'Tour Packages', href: '#packages', type: 'scroll' },
-    { label: 'Services', href: '#services', type: 'scroll' },
-    { label: 'Gallery', href: '#gallery', type: 'scroll' },
-    { label: 'Contact', href: '#footer-contact', type: 'scroll' },
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/?scrollTo=about' },
+    { label: 'Trekking', href: '/?scrollTo=trekking-packages' },
+    { label: 'Bike Riding', href: '/?scrollTo=bike-riding-package' },
+    { label: 'Tour Packages', href: '/?scrollTo=packages' },
+    { label: 'Services', href: '/?scrollTo=services' },
+    { label: 'Gallery', href: '/?scrollTo=gallery' },
+    { label: 'Contact', href: '/?scrollTo=footer-contact' },
   ];
 
-  const handleNavClick = (item: typeof navItems[0]) => {
-    if (item.type === 'scroll') {
-      if (location.pathname === '/') {
-        const element = document.querySelector(item.href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        // Use query param to indicate which section to scroll to
-        window.location.href = `/?scrollTo=${item.href.replace('#', '')}`;
-      }
-      setIsMenuOpen(false);
-    }
-  };
+  
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
@@ -50,26 +37,17 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              item.type === 'link' ? (
-                <Link
-                  key={index}
-                  to={item.href}
-                  className="text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <button
-                  key={index}
-                  onClick={() => handleNavClick(item)}
-                  className="text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
-                >
-                  {item.label}
-                </button>
-              )
+              <Link
+                key={index}
+                to={item.href}
+                className="text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
+                {item.label}
+              </Link>
             ))}
             <Link
               to="/membership"
@@ -99,27 +77,17 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             {navItems.map((item, index) => (
-              item.type === 'link' ? (
-                <Link
-                  key={index}
-                  to={item.href}
-                  className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <button
-                  key={index}
-                  onClick={() => handleNavClick(item)}
-                  className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200 text-left w-full"
-                >
-                  {item.label}
-                </button>
-              )
+              <Link
+                key={index}
+                to={item.href}
+                className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
+                {item.label}
+              </Link>
             ))}
             <Link
               to="/membership"

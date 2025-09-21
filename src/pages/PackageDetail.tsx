@@ -33,7 +33,7 @@ const PackageDetail = () => {
   };
 
   return (
-    <div className="pt-16">
+    <div className="">
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <img

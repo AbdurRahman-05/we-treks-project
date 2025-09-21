@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import Hero from '../components/Hero';
-import About from '../components/About';
-import Packages from '../components/Packages';
-import Services from '../components/Services';
+import About from '../pages/About';
+import Packages from '../pages/Packages';
+import Services from '../pages/Services';
 import Testimonials from '../components/Testimonials';
-import Gallery from '../components/Gallery';
+import Gallery from '../pages/Gallery';
 import TrekkingPackages from '../components/TrekkingPackages';
 import BikeRidingPackage from '../components/BikeRidingPackage';
 

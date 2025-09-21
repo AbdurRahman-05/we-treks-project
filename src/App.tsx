@@ -13,6 +13,12 @@ import TrekDetail from './pages/TrekDetail';
 import BikeRidingPackageDetail from './pages/BikeRidingPackageDetail';
 import BookingPage from './pages/BookingPage';
 
+// New imports for the moved components
+import About from './pages/About';
+import Packages from './pages/Packages';
+import Services from './pages/Services';
+import Gallery from './pages/Gallery';
+
 function App() {
   // Sets up the router and renders the header, main content (routes), and footer
   return (
@@ -30,6 +36,12 @@ function App() {
             <Route path="/trek/:id" element={<TrekDetail />} />
             <Route path="/bikeriding/:id" element={<BikeRidingPackageDetail />} />
             <Route path="/booking" element={<BookingPage />} />
+
+            {/* New routes for the moved components */}
+            <Route path="/about" element={<About />} />
+            <Route path="/packages" element={<Packages />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/gallery" element={<Gallery />} />
           </Routes>
         </main>
         <Footer />

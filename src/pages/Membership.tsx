@@ -149,7 +149,7 @@ const Membership = () => {
 
   // ...existing code...
   return (
-    <div className="pt-16">
+    <div>
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="text-white text-2xl font-bold">Processing...</div>

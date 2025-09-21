@@ -8,10 +8,10 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   // List of quick navigation links for the footer
   const quickLinks = [
-    { label: 'About Us', href: '/' },
-    { label: 'Trek Packages', href: '/' },
-    { label: 'Services', href: '/' },
-    { label: 'Gallery', href: '/' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Trek Packages', href: '/packages' },
+    { label: 'Services', href: '/services' },
+    { label: 'Gallery', href: '/gallery' },
     { label: 'Contact', href: '/contact' },
     { label: 'Blog', href: '#' }
   ];
