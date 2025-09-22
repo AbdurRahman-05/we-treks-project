@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   // List of quick navigation links for the footer
   const quickLinks = [
-    { label: 'About Us', href: '/about' },
-    { label: 'Trek Packages', href: '/packages' },
-    { label: 'Services', href: '/services' },
-    { label: 'Gallery', href: '/gallery' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'Blog', href: '#' }
+    { label: 'About Us', href: '/?scrollTo=about-us-header' },
+    { label: 'Trek Packages', href: '/?scrollTo=trek-packages-header' },
+    { label: 'Services', href: '/?scrollTo=services-header' },
+    { label: 'Gallery', href: '/?scrollTo=gallery-header' },
+    { label: 'Contact', href: '/?scrollTo=contact-header' },
+    { label: 'Blog', href: '/?scrollTo=blog-header' }
   ];
 
   // List of popular packages (first 6 from packages)

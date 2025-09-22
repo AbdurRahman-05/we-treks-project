@@ -5,7 +5,7 @@ import logo from '../images/eae1499f-5f52-4311-8a8d-5fe1923bdb0f.jpeg';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+  const location = useLocation(); // Keep useLocation for potential future use or active link styling
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -17,8 +17,6 @@ const Header = () => {
     { label: 'Gallery', href: '/?scrollTo=gallery' },
     { label: 'Contact', href: '/?scrollTo=footer-contact' },
   ];
-
-  
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
@@ -41,9 +39,19 @@ const Header = () => {
                 key={index}
                 to={item.href}
                 className="text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
-                onClick={() => {
+                onClick={(e) => {
+                  const { href } = e.currentTarget;
+                  const scrollToId = href.split('scrollTo=')[1];
+                  if (scrollToId) {
+                    const element = document.getElementById(scrollToId);
+                    if (element) {
+                      e.preventDefault();
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
                   setIsMenuOpen(false);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               >
                 {item.label}
@@ -53,7 +61,7 @@ const Header = () => {
               to="/membership"
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full font-medium transition-colors duration-200"
               onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top for membership
               }}
             >
               Get Membership
@@ -81,9 +89,19 @@ const Header = () => {
                 key={index}
                 to={item.href}
                 className="block py-1.5 text-gray-700 hover:text-emerald-600 font-medium transition-colors duration-200"
-                onClick={() => {
+                onClick={(e) => {
+                  const { href } = e.currentTarget;
+                  const scrollToId = href.split('scrollTo=')[1];
+                  if (scrollToId) {
+                    const element = document.getElementById(scrollToId);
+                    if (element) {
+                      e.preventDefault();
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
                   setIsMenuOpen(false);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               >
                 {item.label}
@@ -94,7 +112,7 @@ const Header = () => {
               className="block w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full font-medium transition-colors duration-200 text-center"
               onClick={() => {
                 setIsMenuOpen(false);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top for membership
               }}
             >
               Get Membership

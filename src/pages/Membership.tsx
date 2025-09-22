@@ -29,6 +29,22 @@ const Membership = () => {
   const [popupMessage, setPopupMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{name: string, amount: number} | null>(null);
+  const [age, setAge] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (form.dob) {
+      const birthDate = new Date(form.dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      setAge(age);
+    } else {
+      setAge(null);
+    }
+  }, [form.dob]);
 
   const handlePlanSelect = (plan: {name: string, amount: number}) => {
     // Force plan name to match backend expectations
@@ -269,7 +285,14 @@ const Membership = () => {
                     className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300 text-center font-bold"
                   />
                   <input name="name" value={form.name} onChange={handleChange} required placeholder="Full Name" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
-                  <input name="dob" value={form.dob} onChange={handleChange} required placeholder="Date of Birth" type="date" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
+                  <div className="relative">
+                    <input name="dob" value={form.dob} onChange={handleChange} required placeholder="Date of Birth" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => {if(!e.target.value) e.target.type='text'}} type="text" className="px-4 pr-24 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300 w-full" />
+                    {age !== null && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        Age: {age}
+                      </span>
+                    )}
+                  </div>
                   <input name="mobile" value={form.mobile} onChange={handleChange} required placeholder="Mobile Number" type="tel" pattern="[0-9]{10}" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
                   <input name="email" value={form.email} onChange={handleChange} required placeholder="Email" type="email" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />
                   <input name="occupation" value={form.occupation} onChange={handleChange} required placeholder="Occupation" className="px-4 py-3 rounded-lg bg-white/80 text-gray-900 focus:ring-2 focus:ring-emerald-400 transition-all duration-300" />

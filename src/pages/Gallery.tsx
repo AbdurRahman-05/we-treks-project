@@ -103,7 +103,7 @@ const Gallery = () => {
         {/* Header */}
         {/* Header section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 id="gallery-header" className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
             Adventure
             <span className="text-emerald-600 block">Gallery</span>
           </h2>

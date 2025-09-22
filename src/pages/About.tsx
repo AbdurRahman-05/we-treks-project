@@ -31,7 +31,7 @@ const About = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 id="about-us-header" className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Your Trusted
               <span className="text-emerald-600 block">Adventure Partner</span>
             </h2>

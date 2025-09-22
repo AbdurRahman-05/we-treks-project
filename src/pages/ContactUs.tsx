@@ -27,7 +27,7 @@ const ContactUs = () => (
     {/* Contact card container */}
     <div className="text-center text-slate-100 px-4 sm:px-6 lg:px-8 max-w-md w-full animate-fade-in bg-slate-900/70 rounded-2xl shadow-2xl py-12 backdrop-blur-md">
       {/* Heading */}
-      <h1 className="text-4xl font-extrabold mb-6 tracking-tight font-sans animate-bounce text-amber-300 drop-shadow-lg">Get in Touch</h1>
+      <h1 id="contact-header" className="text-4xl font-extrabold mb-6 tracking-tight font-sans animate-bounce text-amber-300 drop-shadow-lg">Get in Touch</h1>
       <p className="mb-10 text-lg text-slate-200 font-medium">We'd love to hear from you! Reach out for trek bookings, questions, or partnership opportunities.</p>
       {/* Contact links */}
       <div className="space-y-8">

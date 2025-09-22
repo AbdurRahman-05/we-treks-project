@@ -40,7 +40,7 @@ const Packages = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 id="trek-packages-header" className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
             Popular Tour
             <span className="text-emerald-600 block">Packages</span>
           </h2>

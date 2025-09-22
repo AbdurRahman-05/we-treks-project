@@ -18,6 +18,7 @@ import About from './pages/About';
 import Packages from './pages/Packages';
 import Services from './pages/Services';
 import Gallery from './pages/Gallery';
+import Blog from './pages/Blog';
 
 function App() {
   // Sets up the router and renders the header, main content (routes), and footer
@@ -42,6 +43,7 @@ function App() {
             <Route path="/packages" element={<Packages />} />
             <Route path="/services" element={<Services />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/blog" element={<Blog />} />
           </Routes>
         </main>
         <Footer />
