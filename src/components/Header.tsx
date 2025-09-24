@@ -10,9 +10,9 @@ const Header = () => {
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/?scrollTo=about' },
+    { label: 'Tour Packages', href: '/?scrollTo=packages' },
     { label: 'Trekking', href: '/?scrollTo=trekking-packages' },
     { label: 'Bike Riding', href: '/?scrollTo=bike-riding-package' },
-    { label: 'Tour Packages', href: '/?scrollTo=packages' },
     { label: 'Services', href: '/?scrollTo=services' },
     { label: 'Gallery', href: '/?scrollTo=gallery' },
     { label: 'Contact', href: '/?scrollTo=footer-contact' },

@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, Calendar, MapPin, Truck, Star, Heart, Wind, Shield, Bike } from 'lucide-react';
 import axios from 'axios';
 import Lottie from "lottie-react";
 import confettiAnimation from '../animations/Flex Confetti.json';
+import statesAndCities from '../data/states-and-cities.json';
 
 
 const apiUrl = import.meta.env.PROD
   ? import.meta.env.VITE_API_URL_PRODUCTION
   : import.meta.env.VITE_API_URL_DEVELOPMENT;
+// Fallback to window.location.origin if env is not set
+const safeApiUrl = apiUrl || window.location.origin;
+
+type Person = {
+  name: string;
+  age: string;
+  relation: string;
+  occupation: string;
+  phone: string;
+  email: string;
+  city: string;
+  state: string;
+};
 
 const BookingPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const packageData = location.state?.packageData;
 
   const [personCount, setPersonCount] = useState(1);
   const [isMember, setIsMember] = useState(false);
   const [membershipId, setMembershipId] = useState('');
   const [date, setDate] = useState('');
-  const [personDetails, setPersonDetails] = useState([{
+  const [personDetails, setPersonDetails] = useState<Person[]>([{
     name: '',
     age: '',
     relation: 'friend',
@@ -49,9 +64,26 @@ const BookingPage = () => {
   const [isMembershipValid, setIsMembershipValid] = useState(false);
   const [membershipError, setMembershipError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidationLoading, setIsValidationLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [showCelebration, setShowCelebration] = useState(false);
+  const [states, setStates] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[][]>([]);
+
+  useEffect(() => {
+    setStates(Object.keys(statesAndCities));
+  }, []);
+
+  useEffect(() => {
+    const newCities = personDetails.map(person => {
+      if (person.state) {
+        return statesAndCities[person.state as keyof typeof statesAndCities] || [];
+      }
+      return [];
+    });
+    setCities(newCities);
+  }, [JSON.stringify(personDetails.map(p => p.state))]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -84,8 +116,8 @@ const BookingPage = () => {
           occupation: '', 
           phone: '', 
           email: '', 
-          city: '', 
-          state: '' 
+          city: newPersonDetails[0]?.city || '', 
+          state: newPersonDetails[0]?.state || '' 
         });
       }
     } else if (personCount < newPersonDetails.length) {
@@ -95,10 +127,10 @@ const BookingPage = () => {
   }, [personCount]);
 
     useEffect(() => {
-    if (personDetails.length > 0 && personDetails[0].email) {
+    if (personDetails.length > 0 && personDetails[0] && personDetails[0].email) {
       setValidationEmail(personDetails[0].email);
     }
-  }, [personDetails[0].email]);
+  }, [personDetails[0]?.email]);
 
   useEffect(() => {
     return () => {
@@ -108,7 +140,7 @@ const BookingPage = () => {
   }, []);
 
   useEffect(() => {
-    if (personDetails.length > 1) {
+    if (personDetails.length > 1 && personDetails[0]) {
       const firstPersonRelation = personDetails[0].relation;
       if (firstPersonRelation !== 'friend') {
         const newPersonDetails = personDetails.map((person, index) => {
@@ -120,32 +152,27 @@ const BookingPage = () => {
         setPersonDetails(newPersonDetails);
       }
     }
-  }, [personDetails[0].relation]);
+  }, [personDetails[0]?.relation]);
 
-  if (!packageData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Package data not provided.</h1>
-          <Link to="/" className="text-emerald-600 hover:text-emerald-700">
-            Return to Home
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Redirect to home if packageData is missing
+  useEffect(() => {
+    if (!packageData) {
+      navigate('/');
+    }
+  }, [packageData, navigate]);
+  if (!packageData) return null;
 
-  const handlePersonDetailChange = (index, field, value) => {
+  const handlePersonDetailChange = (index: number, field: keyof Person, value: string) => {
     const newPersonDetails = [...personDetails];
     newPersonDetails[index][field] = value;
     setPersonDetails(newPersonDetails);
   };
 
-  const handleHealthDetailChange = (field, value) => {
+  const handleHealthDetailChange = (field: string, value: string) => {
     setHealthDetails({ ...healthDetails, [field]: value });
   };
 
-  const handleBikeDetailChange = (field, value) => {
+  const handleBikeDetailChange = (field: string, value: string) => {
     setBikeDetails({ ...bikeDetails, [field]: value });
   };
 
@@ -155,8 +182,11 @@ const BookingPage = () => {
       return;
     }
 
+    setIsValidationLoading(true);
+    setMembershipError('');
+
     try {
-      const response = await axios.post(`${apiUrl}/api/validate-membership`, {
+  const response = await axios.post(`${safeApiUrl}/api/validate-membership`, {
         email: validationEmail,
         membershipId: membershipId,
       });
@@ -173,11 +203,42 @@ const BookingPage = () => {
       setIsMembershipValid(false);
       setMembershipError('Failed to validate membership. Please try again.');
       console.error('Membership validation failed:', error);
+    } finally {
+      setIsValidationLoading(false);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    for (const person of personDetails) {
+      if (!person.name || !person.age || !person.relation || !person.occupation || !person.phone || !person.email || !person.city || !person.state) {
+        alert('Please fill out all person details.');
+        return;
+      }
+    }
+
+    if (packageData.trekDuration) {
+      if (healthDetails.heartConditions === 'yes' || healthDetails.respiratoryIssues === 'yes' || healthDetails.pastInjuries === 'yes') {
+        if (!healthDetails.otherConcerns) {
+          alert('Please provide details about your health conditions.');
+          return;
+        }
+      }
+    }
+
+    if (packageData.duration) {
+      if (!bikeDetails.name || !bikeDetails.cc || !bikeDetails.experience) {
+        alert('Please fill out all bike details.');
+        return;
+      }
+    }
+
+    if (!arrivalPlace) {
+      alert('Please enter your arriving place.');
+      return;
+    }
+
     if (!termsAccepted) {
       alert('Please accept the terms and conditions.');
       return;
@@ -214,7 +275,7 @@ const BookingPage = () => {
     };
 
     try {
-      const response = await axios.post(`${apiUrl}/api/v2/booking`, bookingData);
+  const response = await axios.post(`${safeApiUrl}/api/v2/booking`, bookingData);
             setPopupMessage('Booking confirmed! We have sent you an email with the details.');
       setShowCelebration(true);
       
@@ -261,12 +322,18 @@ const BookingPage = () => {
           subject: 'Pickup Request for Booking',
           recipient: 'your-admin-email@example.com', // Replace with the actual admin email
         };
-        await axios.post(`${apiUrl}/api/v2/send-admin-email`, adminEmailData);
+  await axios.post(`${safeApiUrl}/api/v2/send-admin-email`, adminEmailData);
         console.log('Admin email sent for pickup request.');
       }
     } catch (error) {
-      console.error('Booking failed:', error.response ? error.response.data : error.message);
-      alert('Booking failed. Please try again.');
+      let errorMsg = 'Booking failed. Please try again.';
+      if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+        errorMsg = error.response.data.error;
+      } else if (error instanceof Error) {
+        errorMsg = error.message;
+      }
+      console.error('Booking failed:', error);
+      alert(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -397,22 +464,36 @@ const BookingPage = () => {
                     required
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
                   />
-                  <input
-                    type="text"
-                    placeholder="City"
+                  <select
+                    value={person.state}
+                    onChange={(e) => {
+                      const newState = e.target.value;
+                      handlePersonDetailChange(index, 'state', newState);
+                      const newCities = statesAndCities[newState as keyof typeof statesAndCities] || [];
+                      const updatedCities = [...cities];
+                      updatedCities[index] = newCities;
+                      setCities(updatedCities);
+                      handlePersonDetailChange(index, 'city', newCities[0] || '');
+                    }}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Select State</option>
+                    {states.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  <select
                     value={person.city}
                     onChange={(e) => handlePersonDetailChange(index, 'city', e.target.value)}
                     required
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="State"
-                    value={person.state}
-                    onChange={(e) => handlePersonDetailChange(index, 'state', e.target.value)}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
-                  />
+                  >
+                    <option value="">Select City</option>
+                    {cities[index] && cities[index].map(city => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
                 </div>
               ))}
 
@@ -598,10 +679,10 @@ const BookingPage = () => {
                     <button
                       type="button"
                       onClick={handleMembershipValidation}
-                      disabled={isMembershipValid}
+                      disabled={isMembershipValid || isValidationLoading}
                       className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-colors duration-200 disabled:bg-gray-400"
                     >
-                      {isMembershipValid ? 'Validated' : 'Validate Membership'}
+                      {isValidationLoading ? 'Validating...' : (isMembershipValid ? 'Validated' : 'Validate Membership')}
                     </button>
                     {membershipError && (
                       <p className="mt-2 text-sm text-red-600">{membershipError}</p>
