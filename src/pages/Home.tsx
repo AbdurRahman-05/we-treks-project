@@ -39,8 +39,8 @@ const Home = () => {
         <Hero />
         <About />
         <TrekkingPackages />
-        <Packages />
         <BikeRidingPackage />
+        <Packages />
         <Services />
         <Testimonials />
         <Gallery />
